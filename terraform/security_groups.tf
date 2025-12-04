@@ -12,7 +12,7 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # (Optional) HTTPS 443, if you later add cert
+  
   # ingress {
   #   description = "HTTPS from anywhere"
   #   from_port   = 443
@@ -47,7 +47,7 @@ resource "aws_security_group" "app_sg" {
     security_groups = [aws_security_group.alb_sg.id]
   }
 
-  # No SSH from world. Egress open so instance can reach internet via NAT.
+  
   egress {
     from_port   = 0
     to_port     = 0
@@ -59,3 +59,4 @@ resource "aws_security_group" "app_sg" {
     Name = "${var.project_name}-app-sg"
   }
 }
+

@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")/../terraform"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR/terraform"
+
 ALB_DNS=$(terraform output -raw alb_dns_name)
 
-echo "Testing /"
-curl http://$ALB_DNS/
+echo "Testing / endpoint:"
+curl -s "http://${ALB_DNS}/" || { echo "Failed /"; exit 1; }
 
-echo "Testing /health"
-curl http://$ALB_DNS/health
+echo
+echo "Testing /health endpoint:"
+curl -s "http://${ALB_DNS}/health" || { echo "Failed /health"; exit 1; }
+
+echo
+echo "Tests completed."

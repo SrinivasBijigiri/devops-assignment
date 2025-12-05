@@ -71,21 +71,23 @@ resource "aws_launch_template" "app_lt" {
 
   user_data = base64encode(<<-EOF
     #!/bin/bash
+    # Log user-data to a file for debugging
+    exec > /var/log/user-data.log 2>&1
     set -xe
 
     yum update -y
-    yum install -y python3 pip
+    # FIX: use python3-pip instead of "pip"
+    yum install -y python3 python3-pip
 
     mkdir -p /opt/app
     cd /opt/app
 
-    # Application code
     cat << 'APP' > server.py
 from flask import Flask
 app = Flask(__name__)
 @app.route("/")
 def index():
-    return "Hello I'm Srinivas Bijigiri!"
+    return "Hello I'm Srinivas Bijigiri"
 @app.route("/health")
 def health():
     return "ok"
@@ -95,7 +97,7 @@ APP
 
     pip3 install flask
 
-    # Run the app, log to stdout/stderr via nohup log file
+    # Start the app and send logs to a file
     nohup python3 server.py > /var/log/app.log 2>&1 &
   EOF
   )
@@ -136,5 +138,6 @@ resource "aws_autoscaling_group" "app_asg" {
     create_before_destroy = true
   }
 }
+
 
 

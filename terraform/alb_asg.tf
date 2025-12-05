@@ -85,7 +85,7 @@ from flask import Flask
 app = Flask(__name__)
 @app.route("/")
 def index():
-    return "Hello from private EC2 behind ALB!"
+    return "Hello I'm Srinivas Bijigiri!"
 @app.route("/health")
 def health():
     return "ok"
@@ -136,4 +136,5 @@ resource "aws_autoscaling_group" "app_asg" {
     create_before_destroy = true
   }
 }
+
 

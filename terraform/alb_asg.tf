@@ -1,8 +1,8 @@
-# Get latest Amazon Linux 2 AMI
+
 data "aws_ami" "amazon_linux_2" {
   most_recent = true
 
-  owners = ["137112412989"] # Amazon
+  owners = ["137112412989"]
 
   filter {
     name   = "name"
@@ -136,3 +136,4 @@ resource "aws_autoscaling_group" "app_asg" {
     create_before_destroy = true
   }
 }
+
